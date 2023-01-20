@@ -5,15 +5,20 @@ services:
     image: postgres:latest
     container_name: mb_labs_databse
     restart: unless-stopped
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_USER=mblabs
       - POSTGRES_PASSWORD=mblabs
       - POSTGRES_DB=mblabs
     volumes:
-      - pgdata:/data/postgres
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
 
 volumes:
-  pgdata:
-    driver: local
+    postgres:

@@ -13,7 +13,7 @@ datasource db {
 model Event {
   id         String   @id @default(uuid())
   name       String
-  date       DateTime
+  date       String
   address    Json
   type       String
   created_at DateTime @default(now())
