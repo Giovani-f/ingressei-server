@@ -3,11 +3,13 @@ import EventRepository from '@/domain/repositories/event-repository'
 import Batch from '@/domain/entities/batch'
 import Ticket from '@/domain/entities/ticket'
 import TicketRepository from '@/domain/repositories/ticket-repository'
+import BatchRepository from '@/domain/repositories/bathc-repository'
 
 export default class CreateEvent {
   constructor (
     readonly eventRepository: EventRepository,
-    readonly ticketRepository: TicketRepository
+    readonly ticketRepository: TicketRepository,
+    readonly batchRepository: BatchRepository
   ) {}
 
   async execute (input: Input): Promise<void> {
@@ -20,11 +22,20 @@ export default class CreateEvent {
     }
 
     const eventData = await this.eventRepository.create(event)
-    await this.ticketRepository.create({
+    const ticketData = await this.ticketRepository.create({
       eventId: eventData.id,
       totalQuantity: ticket.totalQuantity,
       reamingQuantity: ticket.totalQuantity
     })
+    for await (const batch of ticket.batchs) {
+      await this.batchRepository.create({
+        ticketId: ticketData.id,
+        quantity: batch.quantity,
+        price: batch.price,
+        startDate: batch.startDate,
+        endDate: batch.endDate
+      })
+    }
   }
 }
 
