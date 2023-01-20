@@ -1,20 +1,20 @@
 import Batch from '@/domain/entities/batch'
 
 export default class Ticket {
-  ticketBatchs: Batch[]
+  batchs: Batch[]
   constructor (
     readonly totalAmount: number
   ) {
-    this.ticketBatchs = []
+    this.batchs = []
   }
 
   addBatch (batch: Batch, eventDate: Date): void {
     batch.isValidEndDate(eventDate)
-    this.ticketBatchs.push(new Batch(batch.amount, batch.price, batch.startDate, batch.endDate))
+    this.batchs.push(new Batch(batch.amount, batch.price, batch.startDate, batch.endDate))
   }
 
   isValidNumberOfBatchTickets (): void {
-    const batchTicketsQuantity = this.ticketBatchs
+    const batchTicketsQuantity = this.batchs
       .map(batch => batch.amount)
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
 

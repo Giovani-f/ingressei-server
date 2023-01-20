@@ -9,7 +9,7 @@ export default class Batch {
   }
 
   isValidEndDate (date: Date): void {
-    if (new Date(this.endDate) < date) throw new Error('The batch end date must be less than the event date')
+    if (new Date(this.endDate) > date) throw new Error('The batch end date must be less than the event date')
   }
 
   isValidDate (): void {
