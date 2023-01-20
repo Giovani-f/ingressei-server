@@ -2,10 +2,10 @@ import Ticket from '@/domain/entities/ticket'
 import Batch from '@/domain/entities/batch'
 
 describe('Ticket domain', () => {
-  const totalAmount = 1000
+  const totalQuantity = 1000
 
   it('should create a ticket', () => {
-    const sut = new Ticket(totalAmount)
+    const sut = new Ticket(totalQuantity)
 
     sut.addBatch(
       new Batch(300, 99.90, '2023-01-19T23:16:22.908Z', '2023-01-30T23:16:22.908Z'),
@@ -13,10 +13,10 @@ describe('Ticket domain', () => {
     )
 
     expect(sut).toEqual({
-      totalAmount: 1000,
+      totalQuantity: 1000,
       batchs: [
         {
-          amount: 300,
+          quantity: 300,
           price: 99.90,
           startDate: '2023-01-19T23:16:22.908Z',
           endDate: '2023-01-30T23:16:22.908Z'
@@ -26,7 +26,7 @@ describe('Ticket domain', () => {
   })
 
   it('should throws when creating a batch with the end date greater than the event date', () => {
-    const sut = new Ticket(totalAmount)
+    const sut = new Ticket(totalQuantity)
 
     expect(() => sut.addBatch(
       new Batch(300, 99.90, '2023-01-19T23:16:22.908Z', '2023-01-28T23:16:22.908Z'),
@@ -35,7 +35,7 @@ describe('Ticket domain', () => {
   })
 
   it('should throws when creating a batch with the end date greater than the start date', () => {
-    const sut = new Ticket(totalAmount)
+    const sut = new Ticket(totalQuantity)
 
     expect(() => sut.addBatch(
       new Batch(300, 99.90, '2023-01-19T23:16:22.908Z', '2023-01-10T23:16:22.908Z'),
@@ -43,8 +43,8 @@ describe('Ticket domain', () => {
     )).toThrow(new Error('Batch end date must be greater than start date'))
   })
 
-  it('should throws when the total tickets of batches is greater than the total amount of tickets', () => {
-    const sut = new Ticket(totalAmount)
+  it('should throws when the total tickets of batches is greater than the total quantity of tickets', () => {
+    const sut = new Ticket(totalQuantity)
 
     sut.addBatch(
       new Batch(1100, 99.90, '2023-01-19T23:16:22.908Z', '2023-01-30T22:16:22.908Z'),

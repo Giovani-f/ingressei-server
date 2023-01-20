@@ -1,5 +1,3 @@
-import Ticket from '@/domain/entities/ticket'
-
 type Address = {
   country: string
   city: string
@@ -17,23 +15,17 @@ type EventData = {
   type: string
 }
 
-type TicketData = {
-  totalAmount: number
-}
-
 export default class Event {
   name: string
   address: Address
   date: string
   type: string
-  ticket: Ticket
 
-  constructor (eventData: EventData, ticketData: TicketData, currentDate: Date) {
+  constructor (eventData: EventData, currentDate: Date) {
     this.name = eventData.name
     this.address = eventData.address
     this.date = eventData.date
     this.type = eventData.type
-    this.ticket = new Ticket(ticketData.totalAmount)
     this.isValidDate(this.date, currentDate)
     this.isValidEventType()
   }

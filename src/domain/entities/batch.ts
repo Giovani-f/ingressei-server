@@ -1,6 +1,6 @@
 export default class Batch {
   constructor (
-    readonly amount: number,
+    readonly quantity: number,
     readonly price: number,
     readonly startDate: string,
     readonly endDate: string

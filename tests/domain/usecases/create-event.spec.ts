@@ -1,4 +1,5 @@
 import EventRepository from '@/domain/repositories/event-repository'
+import TicketRepository from '@/domain/repositories/ticket-repository'
 import CreateEvent from '@/domain/usecases/create-event'
 
 import { mock, MockProxy } from 'jest-mock-extended'
@@ -7,6 +8,7 @@ import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('Create Event', () => {
   let eventRepository: MockProxy<EventRepository>
+  let ticketRepository: MockProxy<TicketRepository>
   let sut: CreateEvent
   const eventData = {
     name: 'any_name',
@@ -21,10 +23,10 @@ describe('Create Event', () => {
     date: '2023-01-19T23:16:22.908Z',
     type: 'Company',
     ticket: {
-      totalAmount: 500,
+      totalQuantity: 500,
       batchs: [
         {
-          amount: 500,
+          quantity: 500,
           price: 89.90,
           startDate: '2023-01-101T23:16:22.908Z',
           endDate: '2023-01-11T23:16:22.908Z'
@@ -36,11 +38,13 @@ describe('Create Event', () => {
 
   beforeAll(() => {
     eventRepository = mock()
-    eventRepository.create.mockResolvedValue({ id: 'any_id' })
+    eventRepository.create.mockResolvedValue({ id: 'any_event_id' })
+    ticketRepository = mock()
+    ticketRepository.create.mockResolvedValue({ id: 'any_ticket_id' })
   })
 
   beforeEach(() => {
-    sut = new CreateEvent(eventRepository)
+    sut = new CreateEvent(eventRepository, ticketRepository)
   })
 
   it('should create event with correct input', async () => {
@@ -57,20 +61,22 @@ describe('Create Event', () => {
         localNumber: 500
       },
       date: '2023-01-19T23:16:22.908Z',
-      ticket: {
-        batchs: [
-          {
-            amount: 500,
-            endDate: '2023-01-11T23:16:22.908Z',
-            price: 89.9,
-            startDate: '2023-01-101T23:16:22.908Z'
-          }
-        ],
-        totalAmount: 500
-      },
       type: 'Company'
     })
+
     expect(eventRepository.create).toBeCalledTimes(1)
+  })
+
+  it('should create event ticket with correct input', async () => {
+    await sut.execute(eventData)
+
+    expect(ticketRepository.create).toHaveBeenCalledWith({
+      eventId: 'any_event_id',
+      totalQuantity: 500,
+      reamingQuantity: 500
+    })
+
+    expect(ticketRepository.create).toBeCalledTimes(1)
   })
 
   it('should create event without ticket batch', async () => {
