@@ -1,0 +1,19 @@
+version: "4.0"
+
+services:
+  database:
+    image: postgres:latest
+    container_name: mb_labs_databse
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=mblabs
+      - POSTGRES_PASSWORD=mblabs
+      - POSTGRES_DB=mblabs
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata:
+    driver: local
