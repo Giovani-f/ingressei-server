@@ -17,6 +17,16 @@ model Event {
   address    Json
   type       String
   created_at DateTime @default(now())
+  Ticket     Ticket?
 
   @@map("event")
+}
+
+model Ticket {
+  id               String   @id @default(uuid())
+  event            Event    @relation(fields: [event_id], references: [id])
+  event_id         String   @unique
+  total_quantity   Int
+  reaming_quantity Int
+  create_at        DateTime @default(now())
 }
