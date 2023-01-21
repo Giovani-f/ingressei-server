@@ -29,4 +29,16 @@ model Ticket {
   total_quantity   Int
   reaming_quantity Int
   create_at        DateTime @default(now())
+  Batch            Batch[]
+}
+
+model Batch {
+  id         String   @id @default(uuid())
+  ticket     Ticket   @relation(fields: [ticket_id], references: [id])
+  ticket_id  String
+  quantity   Int
+  price      Float
+  start_date String
+  end_date   String
+  created_at DateTime @default(now())
 }
