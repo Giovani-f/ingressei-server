@@ -2,6 +2,7 @@ import { Controller } from '@/application/controllers/controller'
 import { HttpResponse } from '@/application/helpers/http'
 import { ZodValidator } from '@/application/validation/zod-validator'
 import { MockedSchema } from '@/tests/application/helpers/mock-schema'
+import { ServerError } from '@/application/errors/http'
 
 jest.mock('@/application/validation/zod-validator')
 
@@ -37,5 +38,23 @@ describe('FacebookLoginController', () => {
       statusCode: 400,
       data: error
     })
+  })
+
+  it('should return 500 if perform throws', async () => {
+    const error = new Error('perform_error')
+    jest.spyOn(sut, 'perform').mockRejectedValueOnce(error)
+
+    const httpRespose = await sut.handle({ name: 'any_name' }, MockedSchema)
+
+    expect(httpRespose).toEqual({
+      statusCode: 500,
+      data: new ServerError(error)
+    })
+  })
+
+  it('should return same result as perform', async () => {
+    const httpRespose = await sut.handle({ name: 'any_name' }, MockedSchema)
+
+    expect(httpRespose).toEqual(sut.result)
   })
 })
