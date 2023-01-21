@@ -6,7 +6,9 @@ describe('PgEventRepo', () => {
   const prisma = PrismaConnection.getConnection()
 
   beforeEach(async () => {
-    await prisma.event.deleteMany()
+    const deleteEvent = prisma.event.deleteMany()
+    const deleteTicket = prisma.ticket.deleteMany()
+    await prisma.$transaction([deleteTicket, deleteEvent])
     sut = new EventRepositoryPG()
   })
 
