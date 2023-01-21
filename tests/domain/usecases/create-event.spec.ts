@@ -85,27 +85,15 @@ describe('Create Event', () => {
   it('should create ticket batch with correct input', async () => {
     await sut.execute(eventData)
 
-    expect(batchRepository.create).toHaveBeenCalledWith({
+    expect(batchRepository.createMany).toHaveBeenCalledWith([{
       ticketId: 'any_ticket_id',
       quantity: 300,
       price: 89.90,
       startDate: '2023-01-101T23:16:22.908Z',
       endDate: '2023-01-11T23:16:22.908Z'
-    })
+    }])
 
-    expect(batchRepository.create).toBeCalledTimes(1)
-  })
-
-  it('should create ticket batch with correct input', async () => {
-    eventData.ticket.batchs.push({
-      quantity: 100,
-      price: 99.90,
-      startDate: '2023-01-121T23:16:22.908Z',
-      endDate: '2023-01-17T23:16:22.908Z'
-    })
-    await sut.execute(eventData)
-
-    expect(batchRepository.create).toBeCalledTimes(2)
+    expect(batchRepository.createMany).toBeCalledTimes(1)
   })
 
   it('should create event without ticket batch', async () => {

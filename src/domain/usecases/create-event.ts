@@ -27,14 +27,17 @@ export default class CreateEvent {
       totalQuantity: ticket.totalQuantity,
       reamingQuantity: ticket.totalQuantity
     })
-    for await (const batch of ticket.batchs) {
-      await this.batchRepository.create({
-        ticketId: ticketData.id,
-        quantity: batch.quantity,
-        price: batch.price,
-        startDate: batch.startDate,
-        endDate: batch.endDate
+    if (ticketData?.id) {
+      const batchs = ticket.batchs.map(batch => {
+        return {
+          ticketId: ticketData.id,
+          quantity: batch.quantity,
+          price: batch.price,
+          startDate: batch.startDate,
+          endDate: batch.endDate
+        }
       })
+      await this.batchRepository.createMany(batchs)
     }
   }
 }
