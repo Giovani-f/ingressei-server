@@ -17,7 +17,8 @@
     "@prisma/client": "^4.9.0",
     "eslint-plugin-n": "^15.0.0",
     "module-alias": "^2.2.2",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "zod": "^3.20.2"
   },
   "engines": {
     "node": "16.x"
