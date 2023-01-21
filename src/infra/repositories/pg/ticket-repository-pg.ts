@@ -3,7 +3,7 @@ import PrismaConnection from '@/infra/repositories/helpers/connection'
 
 import { PrismaClient } from '@prisma/client'
 
-export default class EventRepositoryPG implements TicketRepository {
+export default class TicketRepositoryPG implements TicketRepository {
   connection: PrismaClient
   constructor () {
     this.connection = PrismaConnection.getConnection()

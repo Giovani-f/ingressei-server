@@ -13,11 +13,16 @@ describe('PgEventRepo', () => {
   })
 
   afterAll(async () => {
+    const deleteEvent = prisma.event.deleteMany()
+    const deleteTicket = prisma.ticket.deleteMany()
+    const deleteBatch = prisma.batch.deleteMany()
+    await prisma.$transaction([deleteBatch, deleteTicket, deleteEvent])
+
     await prisma.$disconnect()
   })
 
   describe('Create', () => {
-    it('should return undefined if email does not exists', async () => {
+    it('should create 1 event', async () => {
       const event = await sut.create({
         name: 'any_name',
         address: {

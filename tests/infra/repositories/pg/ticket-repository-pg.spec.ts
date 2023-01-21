@@ -8,6 +8,7 @@ describe('PgEventRepo', () => {
 
   beforeEach(async () => {
     await prisma.ticket.deleteMany()
+    await prisma.event.deleteMany()
     await prisma.event.create({
       data: {
         name: 'any_name',
@@ -32,11 +33,16 @@ describe('PgEventRepo', () => {
   })
 
   afterAll(async () => {
+    const deleteEvent = prisma.event.deleteMany()
+    const deleteTicket = prisma.ticket.deleteMany()
+    const deleteBatch = prisma.batch.deleteMany()
+    await prisma.$transaction([deleteBatch, deleteTicket, deleteEvent])
+
     await prisma.$disconnect()
   })
 
   describe('Create', () => {
-    it('should return undefined if email does not exists', async () => {
+    it('should create 1 ticket', async () => {
       const ticket = await sut.create({
         eventId: eventResponse?.id,
         totalQuantity: 500,
