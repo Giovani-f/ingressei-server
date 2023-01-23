@@ -12,7 +12,8 @@ export default class CreateEvent {
     readonly batchRepository: BatchRepository
   ) {}
 
-  async execute (input: Input): Promise<void> {
+  async execute (input: Input): Promise<Output> {
+    input.currentDate = input.currentDate ?? new Date()
     const event = new Event(input, input.currentDate)
     const ticket = new Ticket(input.ticket.totalQuantity)
     if (input.ticket.batchs.length === 0) throw new Error('The ticket must contain at least 1 batch')
@@ -27,17 +28,25 @@ export default class CreateEvent {
       totalQuantity: ticket.totalQuantity,
       reamingQuantity: ticket.totalQuantity
     })
-    if (ticketData?.id) {
-      const batchs = ticket.batchs.map(batch => {
-        return {
-          ticketId: ticketData.id,
-          quantity: batch.quantity,
-          price: batch.price,
-          startDate: batch.startDate,
-          endDate: batch.endDate
-        }
-      })
-      await this.batchRepository.createMany(batchs)
+    const batchs = ticket.batchs.map(batch => {
+      return {
+        ticketId: ticketData.id,
+        quantity: batch.quantity,
+        price: batch.price,
+        startDate: batch.startDate,
+        endDate: batch.endDate
+      }
+    })
+    const batchData = await this.batchRepository.createMany(batchs)
+
+    return {
+      eventId: eventData.id,
+      ticket: {
+        id: ticketData.id,
+        batchs: batchData.map(batch => {
+          return { id: batch.id }
+        })
+      }
     }
   }
 }
@@ -47,8 +56,21 @@ type Input = {
   address: Address
   date: string
   type: string
-  ticket: TicketData
-  currentDate: Date
+  ticket: {
+    totalQuantity: number
+    batchs: BatchData[]
+  }
+  currentDate?: Date
+}
+
+type Output = {
+  eventId: string
+  ticket: {
+    id: string
+    batchs: Array<{
+      id: string
+    }>
+  }
 }
 
 type Address = {
@@ -58,11 +80,6 @@ type Address = {
   street: string
   neighborhood: string
   localNumber: number
-}
-
-type TicketData = {
-  totalQuantity: number
-  batchs: BatchData[]
 }
 
 type BatchData = {

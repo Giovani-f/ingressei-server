@@ -9,18 +9,20 @@ export default class BatchRepositoryPG implements BatchRepository {
     this.connection = PrismaConnection.getConnection()
   }
 
-  async createMany (input: CreateBatch.Input[]): Promise<void> {
-    const batchs = input.map(batch => {
-      return {
-        ticket_id: batch.ticketId,
-        quantity: batch.quantity,
-        price: batch.price,
-        start_date: batch.startDate,
-        end_date: batch.endDate
-      }
-    })
-    await this.connection.batch.createMany({
-      data: batchs
+  async createMany (input: CreateBatch.Input[]): Promise<CreateBatch.Output[]> {
+    const batchs = await this.connection.$transaction(
+      input.map(batch => this.connection.batch.create({
+        data: {
+          ticket_id: batch.ticketId,
+          quantity: batch.quantity,
+          price: batch.price,
+          start_date: batch.startDate,
+          end_date: batch.endDate
+        }
+      }))
+    )
+    return batchs.map(batch => {
+      return { id: batch.id }
     })
   }
 }

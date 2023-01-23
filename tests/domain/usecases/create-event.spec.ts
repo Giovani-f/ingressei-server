@@ -44,6 +44,7 @@ describe('Create Event', () => {
     ticketRepository = mock()
     ticketRepository.create.mockResolvedValue({ id: 'any_ticket_id' })
     batchRepository = mock()
+    batchRepository.createMany.mockResolvedValue([{ id: 'any_batch_id' }])
   })
 
   beforeEach(() => {

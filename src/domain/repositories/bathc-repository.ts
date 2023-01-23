@@ -1,5 +1,5 @@
 export default interface BatchRepository {
-  createMany: (input: CreateBatch.Input[]) => Promise<void>
+  createMany: (input: CreateBatch.Input[]) => Promise<CreateBatch.Output[]>
 }
 
 export namespace CreateBatch {
@@ -9,5 +9,9 @@ export namespace CreateBatch {
     price: number
     startDate: string
     endDate: string
+  }
+
+  export type Output = {
+    id: string
   }
 }

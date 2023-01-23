@@ -52,6 +52,17 @@ describe('FacebookLoginController', () => {
     })
   })
 
+  it('should return correct 500 satus and erro if perform throws without error', async () => {
+    jest.spyOn(sut, 'perform').mockRejectedValueOnce(undefined)
+
+    const httpRespose = await sut.handle({ name: 'any_name' }, MockedSchema)
+
+    expect(httpRespose).toEqual({
+      statusCode: 500,
+      data: new ServerError()
+    })
+  })
+
   it('should return same result as perform', async () => {
     const httpRespose = await sut.handle({ name: 'any_name' }, MockedSchema)
 

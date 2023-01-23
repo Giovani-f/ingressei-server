@@ -22,3 +22,5 @@ export const createEventSchema = z.object({
     }).array().nonempty()
   })
 })
+
+export type CreateEventRequest = z.infer<typeof createEventSchema>
