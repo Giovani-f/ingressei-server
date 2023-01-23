@@ -8,9 +8,9 @@ export class ZodValidator implements Validator {
   ) {}
 
   validate (): Error | undefined {
-    const result = this.schema.parse(this.input)
-    if (result instanceof Error) {
-      return new Error(result.message)
+    const result = this.schema.safeParse(this.input)
+    if (!result.success) {
+      return new Error(result.error.message)
     }
     return undefined
   }
