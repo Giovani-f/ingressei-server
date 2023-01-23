@@ -4,8 +4,7 @@ import BatchRepository from '@/domain/repositories/bathc-repository'
 import CreateEvent from '@/domain/usecases/create-event'
 
 import { mock, MockProxy } from 'jest-mock-extended'
-
-// jest.mock('@/domain/entities/event')
+import { set, reset } from 'mockdate'
 
 describe('Create Event', () => {
   let eventRepository: MockProxy<EventRepository>
@@ -34,8 +33,7 @@ describe('Create Event', () => {
           endDate: '2023-01-11T23:16:22.908Z'
         }
       ]
-    },
-    currentDate: new Date('2023-01-10T23:16:22.908Z')
+    }
   }
 
   beforeAll(() => {
@@ -45,6 +43,12 @@ describe('Create Event', () => {
     ticketRepository.create.mockResolvedValue({ id: 'any_ticket_id' })
     batchRepository = mock()
     batchRepository.createMany.mockResolvedValue([{ id: 'any_batch_id' }])
+
+    set(new Date('2023-01-10T23:16:22.908Z'))
+  })
+
+  afterAll(() => {
+    reset()
   })
 
   beforeEach(() => {
