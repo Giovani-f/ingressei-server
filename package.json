@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --clear --inspect=0.0.0.0:9229 src/main",
+    "dev": "ts-node-dev --respawn --transpile-only --exit-child --clear --inspect=0.0.0.0:9229 --watch src src/main",
     "migrate:dev": "npx prisma migrate dev",
     "build": "rimraf dist && tsc -p tsconfig-prod.json",
     "lint": "eslint .",

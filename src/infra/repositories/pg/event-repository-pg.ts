@@ -17,7 +17,19 @@ export default class EventRepositoryPG implements EventRepository {
           { type: { contains: input } },
           {
             address: {
-              path: ['city', 'street', 'neighborhood'],
+              path: ['city'],
+              string_contains: input
+            }
+          },
+          {
+            address: {
+              path: ['street'],
+              string_contains: input
+            }
+          },
+          {
+            address: {
+              path: ['neighborhood'],
               string_contains: input
             }
           }
