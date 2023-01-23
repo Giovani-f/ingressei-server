@@ -1,6 +1,6 @@
 import { badRequest, HttpResponse, serverError } from '@/application/helpers/http'
 import { ZodSchema } from 'zod'
-import { ZodValidator } from '@/application/validation/zod-validator'
+import { ZodValidator } from '@/infra/gateways/zod-validator'
 
 export abstract class Controller {
   abstract perform (httpRequest: any): Promise<HttpResponse>

@@ -1,10 +1,10 @@
 import { Controller } from '@/application/controllers/controller'
 import { HttpResponse } from '@/application/helpers/http'
-import { ZodValidator } from '@/application/validation/zod-validator'
+import { ZodValidator } from '@/infra/gateways/zod-validator'
 import { MockedSchema } from '@/tests/application/helpers/mock-schema'
 import { ServerError } from '@/application/errors/http'
 
-jest.mock('@/application/validation/zod-validator')
+jest.mock('@/infra/gateways/zod-validator')
 
 class ControllerStub extends Controller {
   result: HttpResponse = {
